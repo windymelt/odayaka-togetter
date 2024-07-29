@@ -1,9 +1,11 @@
 import org.scalajs.linker.interface.ModuleSplitStyle
+import scala.sys.process._
 
 lazy val odayakaTogetter = project
   .in(file("."))
   .enablePlugins(ScalaJSPlugin) // Enable the Scala.js plugin in this project
   .enablePlugins(BuildInfoPlugin)
+  .enablePlugins(ScalablyTypedConverterExternalNpmPlugin)
   .settings(
     scalaVersion  := "3.4.1",
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
@@ -34,4 +36,9 @@ lazy val odayakaTogetter = project
       "com.raquo"    %%% "laminar"     % "16.0.0",
       "com.outr"     %%% "scribe"      % "3.15.0",// Logger
     ),
+    externalNpm := {
+      Process("pnpm i --frozen-lockfile", baseDirectory.value).!
+      baseDirectory.value
+    },
+    stIgnore := List("bootstrap"),
   )
