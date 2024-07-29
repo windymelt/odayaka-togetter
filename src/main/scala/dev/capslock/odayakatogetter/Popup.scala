@@ -17,20 +17,20 @@ def PopupMain(): Unit =
     typings.chrome.global.chrome.storage.local.get("ot-setting")
 
   got.`then` { g =>
-    val root: RootNode = render(appContainer, Popup(g))
+    val s = Setting(hideCommentLike = true, calmCommentStyle = true)
+    val root: RootNode = render(appContainer, Popup(s))
   }
 end PopupMain
 
-def Popup(setting: StringDictionary[Any]) = div(
+def Popup(setting: Setting) = div(
   className := "container-fluid",
   styleAttr := "min-width: 400px;",
   h2("おだやかTogetter"),
-  code(setting.get("hide-comment-like").getOrElse(false).asInstanceOf[Boolean]),
   div(
     className := "card",
     i("変更はサイトのリロード後に反映されます"),
-    Switch("hide-comment-like", "コメントのいいね数を表示しない"),
-    Switch("calm-comment-style", "コメントのスタイルを抑制的にする"),
+    Switch("hide-comment-like", "コメントのいいね数を表示しない", setting.hideCommentLike),
+    Switch("calm-comment-style", "コメントのスタイルを抑制的にする", setting.calmCommentStyle),
   ),
   Version,
   addressTag(
